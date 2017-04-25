@@ -1,4 +1,4 @@
-;; Personal Emacs configuration
+1;; Personal Emacs configuration
 (when (version< emacs-version "25.1")
   (error "Configuration needs at least GNU Emacs 24.1. You are using %s" emacs-version))
 
@@ -35,16 +35,12 @@
   :load-path "packages/linkd"
   :config (linkd-mode))
 
-(use-package linkd
-  :load-path "packages/"
-  :config (linkd-mode))
-
 (use-package eldoc
   :diminish eldoc-mode
   :config (eldoc-mode))
 
 (use-package window-numbering
-  :ensure t ; if not installed check in package-archives
+  :ensure t
   :config (window-numbering-mode))
 
 (use-package zygospore
@@ -73,7 +69,6 @@
   (add-hook 'css-mode-hook 'hungry-delete-mode)
   (add-hook 'emacs-lisp-mode-hook 'hungry-delete-mode))
 
-
 (use-package term
   :bind (:map
          term-mode-map
@@ -84,7 +79,6 @@
          ("M-o" . other-window)
          ("M-p" . term-send-up)
          ("M-n" . term-send-down)))
-
 
 (use-package helm
   :ensure t
@@ -153,7 +147,7 @@
           ("C-c p k" . projectile-kill-buffers)
 
           ("C-c p p" . helm-projectile-switch-project)
-          ("C-c p f" . helm-projectile-find-file)
+          ("M-P" . helm-projectile-find-file)
           ("C-c p F" . helm-projectile-find-file-in-known-projects)
           ("C-c p g" . helm-projectile-find-file-dwin)
           ("C-c p d" . helm-projectile-find-dir)
@@ -184,8 +178,6 @@
          ("C-c C->" . mc/mark-all-like-this)
          ("M-<down-mouse-1>" . mc/add-cursor-on-click)))
 
-
-
 (use-package ace-isearch
   :pin melpa-stable
   :ensure t)
@@ -203,36 +195,11 @@
   (progn
     (yas-reload-all)))
 
-
-(use-package neotree
-  :ensure t
-  :bind (([f8] . neotree-toggle))
-  :init
-  (setq projectile-switch-project-action 'neotree-projectile-action
-        neo-theme (if window-system 'icons 'arrow)
-        neo-window-position 'right
-        neo-smart-open t
-        neo-window-width 30
-        neo-window-fixed-size t
-        neo-auto-indent-point t)
-
-  (defun neotree-project-toggle ()
-    "Open NeoTree using the git root."
-    (interactive)
-    (let ((project-dir (projectile-project-root))
-          (file-name (buffer-file-name)))
-      (if project-dir
-          (if (neotree-toggle)
-              (progn
-                (neotree-dir project-dir)
-                (neotree-find file-name)))
-        (message "Could not find git project root."))))
-  )
-
 (use-package restclient
   :ensure t
   :mode ("\\.http\\'" . restclient-mode))
 
+;; Major Modes
 (use-package ruby-mode
   :mode "\\.rb\\'"
   :interpreter "ruby")
@@ -249,12 +216,11 @@
 (use-package borland-blue-theme :ensure t :defer t)
 (use-package cyberpunk-theme :ensure t :defer t)
 
-
 ;; Initialize custom configuration
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'appearance)
 (require 'editor)
-(require 'shell)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
