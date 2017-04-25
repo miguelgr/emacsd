@@ -182,6 +182,13 @@
   :pin melpa-stable
   :ensure t)
 
+(use-package undo-tree
+  :ensure t
+  :config (undo-tree-mode)
+  :bind (("C-x u" . undo-tree-visualize)
+         ("C-/" . undo-tree-undo)
+         ("M-_" . undo-tree-redo)))
+
 (use-package yaml-mode
   :ensure t
   :mode "\\ya?ml\\'")
