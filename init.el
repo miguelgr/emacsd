@@ -19,6 +19,10 @@
   (package-refresh-contents)
   (package-install 'use-package 'yasnippet))
 
+(defmacro add-modes-hook (hook &rest modes)
+  `(dolist (mode (quote ,modes))
+     (let ((mode-name (symbol-name mode)))
+       (add-hook (intern (format "%s-mode-hook" mode-name)) (quote ,hook)))))
 
 (use-package expand-region
   :ensure t
@@ -47,7 +51,6 @@
   :ensure t
   :demand t
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows)))
-
 
 (use-package magit
   :pin melpa-stable
@@ -87,7 +90,7 @@
          ("C-h SPC" . helm-all-mark-rings)
          ("M-Y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
-         ("C-x C-b" . helm-buffers-list)
+         ("M-p" . helm-buffers-list)
          ("C-x C-S-b" . ibuffer)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
@@ -111,22 +114,16 @@
           helm-ff-search-library-in-sexp t
           helm-ff-file-name-history-use-recentf t
           helm-ff-auto-update-initial-value t
-          helm-full-frame nil
-          helm-split-window-in-side-p t)
+          helm-full-frame nil)
 
-    (add-to-list 'display-buffer-alist
-                 `(,(rx bos "*helm" (* not-newline) "*" eos)
-                   (display-buffer-in-side-window)
-                   (inhibit-same-window . t)
-                   (window-height . 0.4)))
+
+    ;; (add-to-list 'display-buffer-alist
+    ;;              `(,(rx bos "*helm" (* not-newline) "*" eos)
+    ;;                (display-buffer-in-side-window)
+    ;;                (inhibit-same-window . t)
+    ;;                (window-height . 0.4)))
 
     (add-to-list 'helm-sources-using-default-as-input #'helm-source-man-pages))
-
-    ;; (my/enable-modes '(helm-mode
-    ;;                    helm-descbinds-mode
-    ;;                    helm-autoresize-mode
-    ;;                    helm-flx-mode)))
-
 
 (use-package helm-descbinds :ensure t :defer t)
 (use-package helm-ag :ensure t :defer t)
@@ -147,8 +144,10 @@
           ("C-c p k" . projectile-kill-buffers)
 
           ("C-c p p" . helm-projectile-switch-project)
-          ("M-P" . helm-projectile-find-file)
-          ("C-c p F" . helm-projectile-find-file-in-known-projects)
+
+          ("C-c p f" . helm-projectile-find-file)
+          ("M-P" . helm-projectile-find-file-in-known-projects)
+
           ("C-c p g" . helm-projectile-find-file-dwin)
           ("C-c p d" . helm-projectile-find-dir)
           ("C-c p C-r" . helm-projectile-recentf)
@@ -193,14 +192,45 @@
   :ensure t
   :mode "\\ya?ml\\'")
 
+;; (add-to-list 'load-path
+;;               "~/.emacs.d/packages/yasnippet")
+;; (setq yas-snippet-dirs
+;;       '("~/.emacs.d/snippets"                 ;; personal snippets
+;;         "~/.emacs.d/packages/yasnippet/snippets"         ;; the default collection
+;;         "~/Projects/yasnippet-django/mode"         ;; the default collection
+;;         ))
+
 (use-package yasnippet
-  :commands (yas-minor-mode)
-  :init ;; befe requiring the package
-  (progn
-    (add-hook 'python-mode-hook #'yas-minor-mode))
-  :config ;  after requiring the package
-  (progn
-    (yas-reload-all)))
+  :ensure t
+  :diminish yas-minor-mode
+  :init (add-hook 'python-mode-hook #'yas-minor-mode)
+  :config (yas-reload-all)
+  )
+
+(use-package neotree
+  :ensure t
+  :bind (([f8] . neotree-toggle))
+  :init
+  (setq ;; projectile-switch-project-action 'neotree-projectile-action
+        neo-theme (if window-system 'icons 'arrow)
+        neo-window-position 'right
+        neo-smart-open t
+        neo-window-width 30
+        neo-window-fixed-size t
+        neo-auto-indent-point t)
+
+  (defun neotree-project-toggle ()
+    "Open NeoTree using the git root."
+    (interactive)
+    (let ((project-dir (projectile-project-root))
+          (file-name (buffer-file-name)))
+      (if project-dir
+          (if (neotree-toggle)
+              (progn
+                (neotree-dir project-dir)
+                (neotree-find file-name)))
+        (message "Could not find git project root."))))
+  )
 
 (use-package restclient
   :ensure t
@@ -235,10 +265,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
+    (yasnippet zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:height 130 :family "Operator Mono")))))

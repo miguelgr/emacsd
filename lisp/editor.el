@@ -23,6 +23,8 @@
 ;; Increase/Decrease font size
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+;; http://www.masteringemacs.org/articles/2012/09/10/hiding-replacing-modeline-strings/
+(global-set-key (kbd "C-c f") 'toggle-frame-fullscreen)
 
 ;; Move between opened buffers
 (global-set-key [C-tab] 'next-buffer)
