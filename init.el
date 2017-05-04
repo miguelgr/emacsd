@@ -1,4 +1,4 @@
-1;; Personal Emacs configuration
+;; Personal Emacs configuration
 (when (version< emacs-version "25.1")
   (error "Configuration needs at least GNU Emacs 24.1. You are using %s" emacs-version))
 
@@ -11,7 +11,8 @@
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages")
                          ("melpa-stable" . "http://stable.melpa.org/packages/")
-                         ("melpa" . "http://melpa.org/packages/")))
+                         ("melpa" . "http://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
 
 
@@ -42,6 +43,22 @@
 (use-package eldoc
   :diminish eldoc-mode
   :config (eldoc-mode))
+
+(use-package company
+  :pin melpa
+  :ensure t
+  :config (global-company-mode))
+
+(use-package company-jedi
+  :ensure t
+  :config
+  (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
+  (setq jedi:use-shortcuts t)
+  (defun config/enable-company-jedi ()
+    (add-to-list 'company-backends 'company-jedi))
+  (add-hook 'python-mode-hook 'config/enable-company-jedi))
 
 (use-package window-numbering
   :ensure t
@@ -116,13 +133,6 @@
           helm-ff-auto-update-initial-value t
           helm-full-frame nil)
 
-
-    ;; (add-to-list 'display-buffer-alist
-    ;;              `(,(rx bos "*helm" (* not-newline) "*" eos)
-    ;;                (display-buffer-in-side-window)
-    ;;                (inhibit-same-window . t)
-    ;;                (window-height . 0.4)))
-
     (add-to-list 'helm-sources-using-default-as-input #'helm-source-man-pages))
 
 (use-package helm-descbinds :ensure t :defer t)
@@ -188,9 +198,20 @@
          ("C-/" . undo-tree-undo)
          ("M-_" . undo-tree-redo)))
 
-(use-package yaml-mode
-  :ensure t
-  :mode "\\ya?ml\\'")
+(use-package org
+  :ensure org-plus-contrib
+  :pin org
+  :mode (("\\.org\\'" . org-mode))
+  :bind (("C-c o c" . org-capture)
+         ("C-c o l" . org-store-link)
+         ("C-c o a" . org-agenda)
+         ("C-c o h" . helm-info-org))
+  :demand t
+  :init
+  (setq org-agenda-files '("~/Agenda")
+        org-src-fontify-natively t
+        )
+  (eval-after-load "org" '(require 'ox-md nil t)))
 
 ;; (add-to-list 'load-path
 ;;               "~/.emacs.d/packages/yasnippet")
@@ -207,30 +228,29 @@
   :config (yas-reload-all)
   )
 
-(use-package neotree
-  :ensure t
-  :bind (([f8] . neotree-toggle))
-  :init
-  (setq ;; projectile-switch-project-action 'neotree-projectile-action
-        neo-theme (if window-system 'icons 'arrow)
-        neo-window-position 'right
-        neo-smart-open t
-        neo-window-width 30
-        neo-window-fixed-size t
-        neo-auto-indent-point t)
+;; (use-package neotree
+;;   :ensure t
+;;   :bind (([f8] . neotree-toggle))
+;;   :init
+;;   (setq neo-theme (if window-system 'icons 'arrow)
+;;         neo-window-position 'right
+;;         neo-smart-open t
+;;         neo-window-width 30
+;;         neo-window-fixed-size t
+;;         neo-auto-indent-point t)
 
-  (defun neotree-project-toggle ()
-    "Open NeoTree using the git root."
-    (interactive)
-    (let ((project-dir (projectile-project-root))
-          (file-name (buffer-file-name)))
-      (if project-dir
-          (if (neotree-toggle)
-              (progn
-                (neotree-dir project-dir)
-                (neotree-find file-name)))
-        (message "Could not find git project root."))))
-  )
+;;   (defun neotree-project-toggle ()
+;;     "Open NeoTree using the git root."
+;;     (interactive)
+;;     (let ((project-dir (projectile-project-root))
+;;           (file-name (buffer-file-name)))
+;;       (if project-dir
+;;           (if (neotree-toggle)
+;;               (progn
+;;                 (neotree-dir project-dir)
+;;                 (neotree-find file-name)))
+;;         (message "Could not find git project root."))))
+;;   )
 
 (use-package restclient
   :ensure t
@@ -244,6 +264,10 @@
 (use-package python
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode))
+
+(use-package yaml-mode
+  :ensure t
+  :mode "\\ya?ml\\'")
 
 ;; Themes
 (use-package rebecca-theme :ensure t)
@@ -265,7 +289,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
+    (company-jedi yasnippet zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
