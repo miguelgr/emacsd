@@ -45,7 +45,7 @@
   :config (eldoc-mode))
 
 (use-package company
-  :pin melpa
+  :pin melpa-stable
   :ensure t
   :config (global-company-mode))
 
@@ -59,6 +59,24 @@
   (defun config/enable-company-jedi ()
     (add-to-list 'company-backends 'company-jedi))
   (add-hook 'python-mode-hook 'config/enable-company-jedi))
+
+(use-package flycheck
+  :ensure t
+  :pin melpa-stable
+  :init (global-flycheck-mode))
+
+(use-package flycheck-pyflakes
+  :ensure t)
+
+;; go to ~/.docsets
+(defvar basic-docsets '("Python 3" "Python 2" "Javascript" "Ansible"))
+
+(use-package helm-dash
+  :ensure t
+  :config
+  (setq helm-dash-common-docsets basic-docsets)
+  (setq helm-dash-browser-func 'eww)
+  :bind (("s-/" . helm-dash-at-point)))
 
 (use-package window-numbering
   :ensure t
@@ -289,7 +307,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (company-jedi yasnippet zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
+    (helm-dash flycheck-pyflakes flycheck company-jedi yasnippet zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
