@@ -49,16 +49,15 @@
   :ensure t
   :config (global-company-mode))
 
-(use-package company-jedi
-  :ensure t
-  :config
-  (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:complete-on-dot t)
-  (setq jedi:use-shortcuts t)
-  (defun config/enable-company-jedi ()
-    (add-to-list 'company-backends 'company-jedi))
-  (add-hook 'python-mode-hook 'config/enable-company-jedi))
+;; (use-package company-jedi
+;;   :ensure t
+;;   :config
+;;   (add-hook 'python-mode-hook 'jedi:setup)
+;;   (setq jedi:complete-on-dot t)
+;;   (setq jedi:use-shortcuts t)
+;;   (defun config/enable-company-jedi ()
+;;     (add-to-list 'company-backends 'company-jedi))
+;;   (add-hook 'python-mode-hook 'config/enable-company-jedi))
 
 (use-package flycheck
   :ensure t
@@ -231,13 +230,13 @@
         )
   (eval-after-load "org" '(require 'ox-md nil t)))
 
-;; (add-to-list 'load-path
-;;               "~/.emacs.d/packages/yasnippet")
-;; (setq yas-snippet-dirs
-;;       '("~/.emacs.d/snippets"                 ;; personal snippets
-;;         "~/.emacs.d/packages/yasnippet/snippets"         ;; the default collection
-;;         "~/Projects/yasnippet-django/mode"         ;; the default collection
-;;         ))
+(add-to-list 'load-path
+              "~/.emacs.d/packages/yasnippet")
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets"                 ;; personal snippets
+        "~/.emacs.d/packages/yasnippet/snippets"         ;; the default collection
+        "~/Projects/yasnippet-django/mode"         ;; the default collection
+        ))
 
 (use-package yasnippet
   :ensure t
@@ -283,6 +282,10 @@
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode))
 
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md" . markdown-mode))
+
 (use-package yaml-mode
   :ensure t
   :mode "\\ya?ml\\'")
@@ -299,18 +302,3 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'appearance)
 (require 'editor)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (helm-dash flycheck-pyflakes flycheck company-jedi yasnippet zygospore yaml-mode window-numbering what-the-commit web-mode use-package smart-mode-line restclient rebecca-theme org neotree multiple-cursors magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-ag expand-region discover cyberpunk-theme borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 130 :family "Operator Mono")))))
