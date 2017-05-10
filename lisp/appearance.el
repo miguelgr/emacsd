@@ -23,11 +23,8 @@
 (display-time-mode)
 (display-battery-mode)
 ;; Font size
-(defvar my-font-family "Operator Mono")
-(defvar my-font-size 130)
-(set-face-attribute 'default nil :height 130)
 (custom-set-faces
- '(default ((t (:height 130 :family "Operator Mono")))))
+ '(default ((t (:height 150 :family "Operator Mono" :weight normal)))))
 ;; Highlight parenthesis
 (electric-pair-mode 1)
 (show-paren-mode t)
