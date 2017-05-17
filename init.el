@@ -18,7 +18,7 @@
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package 'yasnippet))
+  (package-install 'use-package))
 
 (defmacro add-modes-hook (hook &rest modes)
   `(dolist (mode (quote ,modes))
@@ -52,11 +52,12 @@
 ;; (use-package company-jedi
 ;;   :ensure t
 ;;   :config
-;;   (add-hook 'python-mode-hook 'jedi:setup)
-;;   (setq jedi:complete-on-dot t)
-;;   (setq jedi:use-shortcuts t)
+;;   (setq jedi:complete-on-dot t
+;;         jedi:use-shortcuts t)
 ;;   (defun config/enable-company-jedi ()
 ;;     (add-to-list 'company-backends 'company-jedi))
+;;   :init
+;;   (add-hook 'python-mode-hook 'jedi:setup)
 ;;   (add-hook 'python-mode-hook 'config/enable-company-jedi))
 
 (use-package flycheck
@@ -65,7 +66,10 @@
   :init (global-flycheck-mode))
 
 (use-package flycheck-pyflakes
-  :ensure t)
+  :ensure t
+  :init
+  (add-hook 'python-mode-hook 'hungry-delete-mode)
+  )
 
 ;; go to ~/.docsets
 (defvar basic-docsets '("Python 3" "Python 2" "Javascript" "Ansible"))
@@ -180,8 +184,7 @@
           ("C-c p C-r" . helm-projectile-recentf)
           ("C-c p b" . helm-projectile-switch-to-buffer)
           ("C-c p s s" . helm-projectile-ag)
-          ("C-c p s g" . helm-projectile-grep)
-          )
+          ("C-c p s g" . helm-projectile-grep))
   :diminish projectile-mode
   :init
   (setq-default projectile-enable-caching t
@@ -230,20 +233,25 @@
         )
   (eval-after-load "org" '(require 'ox-md nil t)))
 
-(add-to-list 'load-path
-              "~/.emacs.d/packages/yasnippet")
-(setq yas-snippet-dirs
-      '("~/.emacs.d/snippets"                 ;; personal snippets
-        "~/.emacs.d/packages/yasnippet/snippets"         ;; the default collection
-        "~/Projects/yasnippet-django/mode"         ;; the default collection
-        ))
-
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :init (add-hook 'python-mode-hook #'yas-minor-mode)
+  :init
+  (add-hook 'python-mode-hook #'yas-minor-mode)
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"
+                                  "~/.emacs.d/packages/yasnippet/snippets"
+                                  "~/Projects/yasnippet-django/mode" ))
   :config (yas-reload-all)
   )
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  )
+
+
 
 ;; (use-package neotree
 ;;   :ensure t
@@ -280,7 +288,12 @@
 
 (use-package python
   :mode ("\\.py\\'" . python-mode)
-  :interpreter ("python" . python-mode))
+  :interpreter "python")
+
+(use-package go-mode
+  :ensure t
+  :mode ("\\.go\\'" . go-mode)
+  :interpreter "go")
 
 (use-package markdown-mode
   :ensure t
@@ -292,13 +305,25 @@
 
 ;; Themes
 (use-package rebecca-theme :ensure t)
+(use-package doom-themes :ensure t)
 (use-package atom-one-dark-theme :ensure t :defer t)
-(use-package birds-of-paradise-plus-theme :ensure t :defer t)
-(use-package bliss-theme :ensure t :defer t)
-(use-package borland-blue-theme :ensure t :defer t)
-(use-package cyberpunk-theme :ensure t :defer t)
+
 
 ;; Initialize custom configuration
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'appearance)
 (require 'editor)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (exec-path-from-shell zygospore yasnippet yaml-mode workgroups2 window-numbering what-the-commit web-mode use-package undo-tree smart-mode-line restclient rebecca-theme org-plus-contrib org neotree multiple-cursors markdown-mode magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-dash helm-ag go-mode flycheck-pyflakes expand-region doom-themes discover cyberpunk-theme company-jedi borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:height 150 :family "Operator Mono" :weight normal)))))

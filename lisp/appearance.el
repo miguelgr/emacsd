@@ -1,6 +1,7 @@
 ;; Main configuraton for visual appearance
 (add-to-list 'load-path "~/.emacs.d/themes/")
-(load-theme 'rebecca 1)
+;;(load-theme 'rebecca 1)
+(load-theme 'doom-tomorrow-night 1)
 ;; Hide: hidescrollbar, toolbar and menu
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
