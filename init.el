@@ -1,4 +1,4 @@
-;; Personal Emacs configuration
+;;; emacsd --- Personal Emacs configuration
 (when (version< emacs-version "25.1")
   (error "Configuration needs at least GNU Emacs 24.1. You are using %s" emacs-version))
 
@@ -29,6 +29,14 @@
   :ensure t
   :bind (("C-@" . er/expand-region)))
 
+(use-package avy
+  :ensure t
+  :bind (("M-g l" . avy-goto-line)
+         ("M-g w" . avy-goto-word-1)
+         ("M-g e" . avy-goto-word-0)
+         ("C-:" . avy-goto-char)
+         ("C-'" . avy-goto-char-2)))
+
 (use-package autorevert
   :config (global-auto-revert-mode))
 
@@ -44,32 +52,30 @@
   :diminish eldoc-mode
   :config (eldoc-mode))
 
-(use-package company
-  :pin melpa-stable
+(use-package auto-complete
   :ensure t
-  :config (global-company-mode))
-
-;; (use-package company-jedi
-;;   :ensure t
-;;   :config
-;;   (setq jedi:complete-on-dot t
-;;         jedi:use-shortcuts t)
-;;   (defun config/enable-company-jedi ()
-;;     (add-to-list 'company-backends 'company-jedi))
-;;   :init
-;;   (add-hook 'python-mode-hook 'jedi:setup)
-;;   (add-hook 'python-mode-hook 'config/enable-company-jedi))
+  :config
+  (ac-config-default)
+  (ac-set-trigger-key "C-i"))
 
 (use-package flycheck
   :ensure t
-  :pin melpa-stable
-  :init (global-flycheck-mode))
+  :config (global-flycheck-mode))
 
 (use-package flycheck-pyflakes
   :ensure t
-  :init
-  (add-hook 'python-mode-hook 'hungry-delete-mode)
-  )
+  :config
+  (add-hook 'python-mode-hook 'hungry-delete-mode))
+
+(use-package jedi
+  :ensure t
+  :config
+  (add-hook 'python-mode-hook 'jed:setup)
+  (add-hook 'python-mode-hook 'jed:ac-setup)
+  (setq jedi:get-in-function-call-delay 700)
+  :bind (("C-." . jedi:complete)
+         ("C-c ." . jedi:goto-definition)
+         ("C-c :" . jedi:goto-definition-next)))
 
 ;; go to ~/.docsets
 (defvar basic-docsets '("Python 3" "Python 2" "Javascript" "Ansible"))
@@ -77,8 +83,8 @@
 (use-package helm-dash
   :ensure t
   :config
-  (setq helm-dash-common-docsets basic-docsets)
-  (setq helm-dash-browser-func 'eww)
+  (setq helm-dash-common-docsets basic-docsets
+        helm-dash-browser-func 'eww)
   :bind (("s-/" . helm-dash-at-point)))
 
 (use-package window-numbering
@@ -99,6 +105,11 @@
 
 (use-package what-the-commit
   :bind ("C-x g c" . what-the-commit-insert))
+
+(use-package github-browse-file
+  :ensure t
+  :bind ("C-x g b" . github-browse-file)
+  :init (setq github-browse-file-show-line-at-point t))
 
 (use-package hungry-delete
   :ensure t
@@ -128,7 +139,7 @@
          ("C-h SPC" . helm-all-mark-rings)
          ("M-Y" . helm-show-kill-ring)
          ("C-x b" . helm-mini)
-         ("M-p" . helm-buffers-list)
+         ("C-x C-b" . helm-buffers-list)
          ("C-x C-S-b" . ibuffer)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
@@ -177,7 +188,7 @@
           ("C-c p p" . helm-projectile-switch-project)
 
           ("C-c p f" . helm-projectile-find-file)
-          ("M-P" . helm-projectile-find-file-in-known-projects)
+          ("M-p" . helm-projectile-find-file-in-known-projects)
 
           ("C-c p g" . helm-projectile-find-file-dwin)
           ("C-c p d" . helm-projectile-find-dir)
@@ -236,12 +247,12 @@
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :init
-  (add-hook 'python-mode-hook #'yas-minor-mode)
+  :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"
                                   "~/.emacs.d/packages/yasnippet/snippets"
                                   "~/Projects/yasnippet-django/mode" ))
-  :config (yas-reload-all)
+  (yas-reload-all)
+  (add-hook 'python-mode-hook #'yas-minor-mode)
   )
 
 (use-package exec-path-from-shell
@@ -277,6 +288,12 @@
 ;;         (message "Could not find git project root."))))
 ;;   )
 
+;; Initialize custom configuration
+(add-to-list 'load-path "~/.emacs.d/lisp")
+(require 'appearance)
+(require 'editor)
+(require 'python-dev)
+
 (use-package restclient
   :ensure t
   :mode ("\\.http\\'" . restclient-mode))
@@ -288,6 +305,18 @@
 
 (use-package python
   :mode ("\\.py\\'" . python-mode)
+  :config
+  (setq-default fill-column 80
+                indent-tabs-mode nil)
+  ;; Automatically remove trailing whitespace when file is saved.
+  (add-hook 'python-mode-hook
+            (lambda()
+              (add-hook 'local-write-file-hooks
+                        '(lambda()
+                           (save-excursion
+                             (delete-trailing-whitespace))))))
+
+  :bind (("C-c C-b" . python-add-breakpoint))
   :interpreter "python")
 
 (use-package go-mode
@@ -304,26 +333,21 @@
   :mode "\\ya?ml\\'")
 
 ;; Themes
-(use-package rebecca-theme :ensure t)
-(use-package doom-themes :ensure t)
+(use-package rebecca-theme :ensure t :defer t)
+(use-package doom-themes :ensure t :defer t)
+(use-package jazz-theme :ensure t :defer t)
 (use-package atom-one-dark-theme :ensure t :defer t)
-
-
-;; Initialize custom configuration
-(add-to-list 'load-path "~/.emacs.d/lisp")
-(require 'appearance)
-(require 'editor)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
+ '(custom-safe-themes
    (quote
-    (exec-path-from-shell zygospore yasnippet yaml-mode workgroups2 window-numbering what-the-commit web-mode use-package undo-tree smart-mode-line restclient rebecca-theme org-plus-contrib org neotree multiple-cursors markdown-mode magit kosmos-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-dash helm-ag go-mode flycheck-pyflakes expand-region doom-themes discover cyberpunk-theme company-jedi borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
+    ("d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 150 :family "Operator Mono" :weight normal)))))
+ '(default ((t (:height 160 :family "Operator Mono" :weight normal)))))
