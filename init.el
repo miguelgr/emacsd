@@ -70,8 +70,8 @@
 (use-package jedi
   :ensure t
   :config
-  (add-hook 'python-mode-hook 'jed:setup)
-  (add-hook 'python-mode-hook 'jed:ac-setup)
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (add-hook 'python-mode-hook 'jedi:ac-setup)
   (setq jedi:get-in-function-call-delay 700)
   :bind (("C-." . jedi:complete)
          ("C-c ." . jedi:goto-definition)
@@ -344,7 +344,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" default))))
+    ("d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" default)))
+ '(package-selected-packages
+   (quote
+    (python-docstring zygospore yasnippet yaml-mode workgroups2 window-numbering what-the-commit web-mode use-package undo-tree smart-mode-line restclient rebecca-theme org-plus-contrib org neotree multiple-cursors markdown-mode magit kosmos-theme jedi jazz-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-dash helm-ag go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover cyberpunk-theme company-jedi borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
