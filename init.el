@@ -207,6 +207,11 @@
   (projectile-global-mode)
   (helm-projectile-on))
 
+(use-package wgrep
+  :ensure t
+  :bind (("C-c s" . wgrep-save-all-buffers))
+  )
+
 (use-package multiple-cursors
   :ensure t
   :bind (("C->" . mc/mark-next-like-this)
@@ -290,7 +295,6 @@
 
 ;; Initialize custom configuration
 (add-to-list 'load-path "~/.emacs.d/lisp")
-(require 'appearance)
 (require 'editor)
 (require 'python-dev)
 
@@ -333,10 +337,12 @@
   :mode "\\ya?ml\\'")
 
 ;; Themes
-(use-package rebecca-theme :ensure t :defer t)
-(use-package doom-themes :ensure t :defer t)
+(use-package rebecca-theme :ensure t)
+(use-package doom-themes :ensure t)
 (use-package jazz-theme :ensure t :defer t)
 (use-package atom-one-dark-theme :ensure t :defer t)
+(require 'appearance)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -347,7 +353,7 @@
     ("d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" default)))
  '(package-selected-packages
    (quote
-    (python-docstring zygospore yasnippet yaml-mode workgroups2 window-numbering what-the-commit web-mode use-package undo-tree smart-mode-line restclient rebecca-theme org-plus-contrib org neotree multiple-cursors markdown-mode magit kosmos-theme jedi jazz-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-dash helm-ag go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover cyberpunk-theme company-jedi borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
+    (wgrep python-docstring zygospore yasnippet yaml-mode workgroups2 window-numbering what-the-commit web-mode use-package undo-tree smart-mode-line restclient rebecca-theme org-plus-contrib org neotree multiple-cursors markdown-mode magit kosmos-theme jedi jazz-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-dash helm-ag go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover cyberpunk-theme company-jedi borland-blue-theme bliss-theme birds-of-paradise-plus-theme atom-one-dark-theme all-the-icons-dired ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
