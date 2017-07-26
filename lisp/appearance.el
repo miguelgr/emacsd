@@ -3,7 +3,7 @@
 ;;(add-to-list 'load-path "~/.emacs.d/themes/")
 ;;(load-theme 'rebecca 1)
 ;;(load-theme 'jazz-theme 1)
-(load-theme 'doom-tomorrow-night 1)
+(load-theme 'rebecca 1)
 
 ;; Highlight parenthesis
 (electric-pair-mode 1)
@@ -63,6 +63,6 @@
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
 ;; Font size
 (custom-set-faces
- '(default ((t (:height 120 :family "Fira Code" :weight normal)))))
+ '(default ((t (:height 140 :family "Fira Code" :weight normal)))))
 
 (provide 'appearance)
