@@ -325,6 +325,13 @@
   :bind (("C-c C-b" . python-add-breakpoint))
   :interpreter "python")
 
+(use-package pydoc
+  :ensure t)
+
+(use-package helm-pydoc
+  :ensure t
+  :bind (("C-c C-d" . helm-pydoc)))
+
 (use-package go-mode
   :ensure t
   :mode ("\\.go\\'" . go-mode)

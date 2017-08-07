@@ -28,7 +28,7 @@
 
 ;; Move between opened buffers
 (global-set-key [C-tab] 'next-buffer)
-(global-set-key [C-S-tab] 'previous-buffer)
+(global-set-key [C-S-iso-lefttab] 'previous-buffer)
 
 (defun set-mac-keyboard()
   (interactive)
