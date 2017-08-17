@@ -29,6 +29,15 @@
   :ensure t
   :bind (("C-@" . er/expand-region)))
 
+
+(use-package discover
+  :ensure t
+  :config (global-discover-mode 1))
+
+(use-package discover-my-major
+  :ensure t
+  :bind (("C-c h" . discover-my-mayor)))
+
 (use-package avy
   :ensure t
   :bind (("M-g l" . avy-goto-line)
@@ -39,10 +48,6 @@
 
 (use-package autorevert
   :config (global-auto-revert-mode))
-
-(use-package discover
-  :ensure t
-  :config (global-discover-mode 1))
 
 (use-package linkd
   :load-path "packages/linkd"
@@ -66,6 +71,7 @@
   :ensure t
   :config
   (add-hook 'python-mode-hook 'hungry-delete-mode))
+
 
 (use-package jedi
   :ensure t
@@ -351,52 +357,3 @@
 (use-package jazz-theme :ensure t :defer t)
 (use-package atom-one-dark-theme :ensure t :defer t)
 (require 'appearance)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   [("#0d0d0d" "#cc6666" "#b5bd68" "#f0c674" "#81a2be" "#c9b4cf" "#8abeb7" "#ffffff")])
- '(custom-safe-themes
-   (quote
-    ("9541f1dc11258239ef02aa1a5e9db3e1e46bc8fb1d7dbe83946c1541ae6dbdf9" "d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" default)))
- '(fci-rule-color "#5c5e5e")
- '(jdee-db-active-breakpoint-face-colors (cons "#0d0d0d" "#41728e"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#0d0d0d" "#b5bd68"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#0d0d0d" "#5a5b5a"))
- '(org-ellipsis "  ")
- '(org-fontify-done-headline t)
- '(org-fontify-quote-and-verse-blocks t)
- '(org-fontify-whole-heading-line t)
- '(package-selected-packages
-   (quote
-    (howdoi zygospore yasnippet yaml-mode window-numbering wgrep use-package undo-tree restclient rebecca-theme org-plus-contrib multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete helm-tramp helm-projectile helm-descbinds helm-dash helm-ag go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover atom-one-dark-theme ace-isearch)))
- '(vc-annotate-background "#0d0d0d")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#b5bd68")
-    (cons 40 "#c8c06c")
-    (cons 60 "#dcc370")
-    (cons 80 "#f0c674")
-    (cons 100 "#eab56d")
-    (cons 120 "#e3a366")
-    (cons 140 "#de935f")
-    (cons 160 "#d79e84")
-    (cons 180 "#d0a9a9")
-    (cons 200 "#c9b4cf")
-    (cons 220 "#ca9aac")
-    (cons 240 "#cb8089")
-    (cons 260 "#cc6666")
-    (cons 280 "#af6363")
-    (cons 300 "#936060")
-    (cons 320 "#765d5d")
-    (cons 340 "#5c5e5e")
-    (cons 360 "#5c5e5e")))
- '(vc-annotate-very-old-color nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "Fira Code" :weight normal)))))
