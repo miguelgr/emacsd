@@ -29,6 +29,15 @@
   :ensure t
   :bind (("C-@" . er/expand-region)))
 
+(use-package centered-window-mode
+  :ensure t)
+
+(use-package google-translate
+  :ensure t
+  :bind (("C-c t" . google-translate-query-translate)))
+
+(use-package howdoi
+  :ensure t)
 
 (use-package discover
   :ensure t
