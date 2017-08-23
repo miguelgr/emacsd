@@ -203,7 +203,7 @@
           ("C-c p p" . helm-projectile-switch-project)
 
           ("C-c p f" . helm-projectile-find-file)
-          ("M-p" . helm-projectile-find-file-in-known-projects)
+          ("M-p" . helm-projectile-find-file)
 
           ("C-c p g" . helm-projectile-find-file-dwin)
           ("C-c p d" . helm-projectile-find-dir)
