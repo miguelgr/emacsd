@@ -25,6 +25,12 @@
      (let ((mode-name (symbol-name mode)))
        (add-hook (intern (format "%s-mode-hook" mode-name)) (quote ,hook)))))
 
+(use-package resize-window
+  :ensure t)
+
+(use-package focus-mode
+  :ensure t)
+
 (use-package expand-region
   :ensure t
   :bind (("C-@" . er/expand-region)))
@@ -35,6 +41,9 @@
 (use-package google-translate
   :ensure t
   :bind (("C-c t" . google-translate-query-translate)))
+
+(use-package google-this
+  :ensure t)
 
 (use-package howdoi
   :ensure t)
@@ -184,6 +193,9 @@
 
 (use-package helm-descbinds :ensure t :defer t)
 (use-package helm-ag :ensure t :defer t)
+(use-package resize-window :ensure t :defer t)
+(use-package ag :ensure t :defer t)
+
 (use-package helm-tramp :ensure t :defer t)
 (use-package helm-themes :if (display-graphic-p) :bind ([f9] . helm-themes))
 (use-package helm-swoop
@@ -244,7 +256,7 @@
 
 (use-package undo-tree
   :ensure t
-  :config (global-undo-tree-mode)
+  :config (global-undo-tree-mode 1)
   :bind (("C-x u" . undo-tree-visualize)
          ("C-/" . undo-tree-undo)
          ("M-_" . undo-tree-redo)))
@@ -366,3 +378,18 @@
 (use-package jazz-theme :ensure t :defer t)
 (use-package atom-one-dark-theme :ensure t :defer t)
 (require 'appearance)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (ag spacemacs-theme spaceline google-this focus darktooth-theme beacon zygospore yasnippet yaml-mode xkcd window-numbering wgrep use-package undo-tree restclient resize-window rebecca-theme python-docstring pydoc pretty-symbols pretty-mode org-plus-contrib neotree multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi hl-todo helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag google-translate go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell efire doom-themes docker discover-my-major discover centered-window-mode atom-one-dark-theme ace-isearch))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:height 140 :family "Fira Code" :weight normal))))
+ '(fringe ((t (:background "#292a44")))))
