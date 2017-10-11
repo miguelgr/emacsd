@@ -9,8 +9,7 @@
 
 ;; Require packages
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages")
-                         ("melpa-stable" . "http://stable.melpa.org/packages/")
+(setq package-archives '(("melpa-stable" . "http://stable.melpa.org/packages/")
                          ("melpa" . "http://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
@@ -40,10 +39,13 @@
 
 (use-package google-translate
   :ensure t
-  :bind (("C-c t" . google-translate-query-translate)))
+  :bind (("C-c / t" . google-translate-query-translate)
+         ("C-c / ." . google-translate-at-point)))
 
 (use-package google-this
-  :ensure t)
+  :ensure t
+  :bind (("C-c / g" . google-this)))
+
 
 (use-package howdoi
   :ensure t)
@@ -167,7 +169,7 @@
          ("C-x C-S-b" . ibuffer)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
-
+         ("C-c i" . helm-imenu)
          ("C-x c !" . helm-calcul-expression)
          ("M-:" . helm-eval-expression-with-eldoc)
 
@@ -213,6 +215,7 @@
           ("C-c p k" . projectile-kill-buffers)
 
           ("C-c p p" . helm-projectile-switch-project)
+
 
           ("C-c p f" . helm-projectile-find-file)
           ("M-p" . helm-projectile-find-file)
@@ -271,7 +274,7 @@
          ("C-c o h" . helm-info-org))
   :demand t
   :init
-  (setq org-agenda-files '("~/Agenda")
+  (setq org-agenda-files '("~/Agenda/weeks/")
         org-src-fontify-natively t
         )
   (eval-after-load "org" '(require 'ox-md nil t)))
@@ -383,13 +386,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
+ '(custom-safe-themes
+   (quote
+    ("9541f1dc11258239ef02aa1a5e9db3e1e46bc8fb1d7dbe83946c1541ae6dbdf9" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (ag spacemacs-theme spaceline google-this focus darktooth-theme beacon zygospore yasnippet yaml-mode xkcd window-numbering wgrep use-package undo-tree restclient resize-window rebecca-theme python-docstring pydoc pretty-symbols pretty-mode org-plus-contrib neotree multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi hl-todo helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag google-translate go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell efire doom-themes docker discover-my-major discover centered-window-mode atom-one-dark-theme ace-isearch))))
+    (fireplace ox-rst focus-mode ag spacemacs-theme spaceline google-this focus darktooth-theme beacon zygospore yasnippet yaml-mode xkcd window-numbering wgrep use-package undo-tree restclient resize-window rebecca-theme python-docstring pydoc pretty-symbols pretty-mode org-plus-contrib neotree multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi hl-todo helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag google-translate go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell efire doom-themes docker discover-my-major discover centered-window-mode atom-one-dark-theme ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 140 :family "Fira Code" :weight normal))))
- '(fringe ((t (:background "#292a44")))))
+ '(fringe ((t (:background "#292b2e")))))

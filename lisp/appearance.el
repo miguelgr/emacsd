@@ -1,9 +1,9 @@
 ;; Main configuraton for visual appearance
 ;; Themes
 ;;(add-to-list 'load-path "~/.emacs.d/themes/")
-;;(load-theme 'rebecca 1)
+;; (load-theme 'rebecca 1)
+(load-theme 'spacemacs-dark 1)
 ;;(load-theme 'jazz-theme 1)
-(load-theme 'rebecca 1)
 
 ;; Highlight parenthesis
 (electric-pair-mode 1)
@@ -30,6 +30,7 @@
 ;; Modeline config
 (display-time-mode)
 (display-battery-mode)
+
 (when (window-system)
   (set-default-font "Fira Code"))
 (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
