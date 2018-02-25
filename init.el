@@ -9,7 +9,7 @@
 
 ;; Require packages
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages")
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa-stable" . "http://stable.melpa.org/packages/")
                          ("melpa" . "http://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
@@ -55,6 +55,18 @@
 (use-package discover-my-major
   :ensure t
   :bind (("C-c h" . discover-my-mayor)))
+
+(use-package virtualenvwrapper
+  :ensure t
+  :config (venv-initialize-interactive-shells)
+           (venv-initialize-eshell) ;; if you want eshell support
+           (setq venv-location "~/virtualenvs/"))
+ ;; if you want interactive shell support
+
+;; note that setting `venv-location` is not necessary if you
+;; use the default location (`~/.virtualenvs`), or if the
+;; the environment variable `WORKON_HOME` points to the right place
+
 
 (use-package avy
   :ensure t
@@ -289,6 +301,10 @@
 (use-package howdoi
   :ensure t)
 
+(use-package cider
+  :ensure t
+  :pin melpa-stable)
+
 (use-package exec-path-from-shell
   :ensure t
   :config
@@ -353,6 +369,12 @@
   :interpreter "python")
 
 (use-package pydoc
+  :ensure t)
+
+(use-package cider
+  :ensure t)
+
+(use-package paredit
   :ensure t)
 
 (use-package helm-pydoc
