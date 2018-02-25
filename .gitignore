@@ -24,3 +24,7 @@ xkcd
 projectile-bookmarks.eld
 *.dat
 .mc-lists.el
+.python-environments/
+*.cache
+recentf
+session.*
