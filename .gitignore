@@ -28,3 +28,6 @@ projectile-bookmarks.eld
 *.cache
 recentf
 session.*
+
+packages/yasnippet
+url/
