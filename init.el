@@ -289,8 +289,8 @@
   :ensure t
   :diminish yas-minor-mode
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet/snippets"
-                           "~/Projects/yasnippet-django/models"))
+  (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet-snippets/snippets"
+                           "~/Projects/packages/yasnippet-django/snippets/models"))
 
   (yas-reload-all)
   (add-hook 'python-mode-hook #'yas-minor-mode)
@@ -409,6 +409,7 @@
 ;; Themes
 
 
+(use-package spacemas-theme :ensure t :defer t)
 (use-package rebecca-theme :ensure t :defer t)
 (use-package doom-themes :ensure t)
 (use-package jazz-theme :ensure t :defer t)
@@ -423,10 +424,10 @@
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(custom-safe-themes
    (quote
-    ("2f0a552a9d14fe8ddaaacdb7b82a0eee1ea1f7f5d0850789915e5b04a1b9669f" "230302a8dba6a7d46cc37709795427e229e67d5e6817db4f90e370c67766cdb6" "6dcb7ccd43de0f60a1a023fde805cb136dc05ca983db8052f90f919e438f5a53" "9541f1dc11258239ef02aa1a5e9db3e1e46bc8fb1d7dbe83946c1541ae6dbdf9" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("9541f1dc11258239ef02aa1a5e9db3e1e46bc8fb1d7dbe83946c1541ae6dbdf9" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (clojurescript-mode pacmacs aggressive-indent clojure-cheatsheet helm-cider cider cide zerodark-theme web-mode sunburn-theme fireplace ox-rst focus-mode ag spacemacs-theme spaceline google-this focus darktooth-theme beacon zygospore yasnippet yaml-mode xkcd window-numbering wgrep use-package undo-tree restclient resize-window rebecca-theme python-docstring pydoc pretty-symbols pretty-mode org-plus-contrib neotree multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi hl-todo helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag google-translate go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell efire doom-themes docker discover-my-major discover centered-window-mode atom-one-dark-theme ace-isearch))))
+    (spacemas-themes spacemas-theme fireplace ox-rst focus-mode ag spacemacs-theme spaceline google-this focus darktooth-theme beacon zygospore yasnippet yaml-mode xkcd window-numbering wgrep use-package undo-tree restclient resize-window rebecca-theme python-docstring pydoc pretty-symbols pretty-mode org-plus-contrib neotree multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi hl-todo helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag google-translate go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell efire doom-themes docker discover-my-major discover centered-window-mode atom-one-dark-theme ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
