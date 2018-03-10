@@ -1,3 +1,6 @@
 [submodule "yasnippet-snippets"]
 	path = packages/yasnippet-snippets
 	url = https://github.com/AndreaCrotti/yasnippet-snippets
+[submodule "yasnippet-django"]
+	path = packages/yasnippet-django
+	url = https://github.com/DictGet/yasnippet-django.git
