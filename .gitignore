@@ -28,5 +28,7 @@ projectile-bookmarks.eld
 *.cache
 recentf
 session.*
+
 *.el-old
 packages/*
+url/
