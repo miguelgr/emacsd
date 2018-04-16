@@ -2,7 +2,7 @@
 ;; Themes
 ;;(add-to-list 'load-path "~/.emacs.d/themes/")
 ;; (load-theme 'rebecca 1)
-(load-theme 'spacemacs-dark 1)
+;;(load-theme 'spacemacs-dark 1)
 ;;(load-theme 'jazz-theme 1)
 
 ;; Highlight parenthesis

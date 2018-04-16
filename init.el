@@ -28,9 +28,6 @@
 (use-package resize-window
   :ensure t)
 
-(use-package focus-mode
-  :ensure t)
-
 (use-package expand-region
   :ensure t
   :bind (("C-@" . er/expand-region)))
@@ -69,10 +66,6 @@
 
 (use-package autorevert
   :config (global-auto-revert-mode))
-
-(use-package linkd
-  :load-path "packages/linkd"
-  :config (linkd-mode))
 
 (use-package eldoc
   :diminish eldoc-mode
@@ -201,13 +194,6 @@
 
 (use-package helm-tramp :ensure t :defer t)
 (use-package helm-themes :if (display-graphic-p) :bind ([f9] . helm-themes))
-(use-package helm-swoop
-  :ensure t
-  :demand t
-  :bind (("M-i" . helm-swoop)
-         ("M-I" . helm-multi-swoop)
-         :isearch-mode-map
-         ("M-i" . helm-swoop-from-isearch)))
 
 (use-package helm-projectile
   :ensure t
@@ -348,9 +334,6 @@
   :mode "\\.clj\\'"
   :interpreter "clojure")
 
-(use-package clojurescript-mode
-  :ensure t)
-
 (use-package cider
   :ensure t
   :pin melpa-stable)
@@ -408,8 +391,7 @@
 
 ;; Themes
 
-
-(use-package spacemas-theme :ensure t :defer t)
+;;(use-package spacemas-theme :ensure t :defer t)
 (use-package rebecca-theme :ensure t :defer t)
 (use-package doom-themes :ensure t)
 (use-package jazz-theme :ensure t :defer t)
