@@ -28,12 +28,16 @@
 (use-package resize-window
   :ensure t)
 
+
 (use-package expand-region
   :ensure t
   :bind (("C-@" . er/expand-region)))
 
-(use-package centered-window-mode
-  :ensure t)
+
+(use-package writeroom-mode
+  :ensure t
+  :bind (("C-c w m" . writeroom-mode)))
+
 
 (use-package google-translate
   :ensure t
@@ -86,19 +90,21 @@
   :config
   (add-hook 'python-mode-hook 'hungry-delete-mode))
 
-
 (use-package jedi
   :ensure t
   :config
   (add-hook 'python-mode-hook 'jedi:setup)
   (add-hook 'python-mode-hook 'jedi:ac-setup)
-  (setq jedi:get-in-function-call-delay 700)
+  (setq jedi:get-in-function-call-delay 400)
   :bind (("C-." . jedi:complete)
          ("C-c ." . jedi:goto-definition)
          ("C-c :" . jedi:goto-definition-next)))
+;;
+(use-package pytest
+  :ensure t)
 
-;; go to ~/.docsets
-(defvar basic-docsets '("Python 3" "Python 2" "Javascript" "Ansible"))
+
+(defvar basic-docsets '("Python_3" "Python_2" "Ansible" "Emacs_Lisp"))
 
 (use-package helm-dash
   :ensure t
@@ -121,10 +127,7 @@
   :pin melpa-stable
   :bind (("C-c m s" . magit-status)
 	 ("C-c m b" . magit-blame)
-	 ("C-c m f" . magit-diff-buffer-file)))
-
-(use-package what-the-commit
-  :bind ("C-x g c" . what-the-commit-insert))
+	 ("C-c m d" . magit-diff-buffer-file)))
 
 (use-package github-browse-file
   :ensure t
@@ -170,8 +173,8 @@
          ("C-h a" . helm-apropos)
          ("C-h i" . helm-info-emacs)
          ("C-h b" . helm-descbinds)
-         ("C-h C-l" . helm-locate-library)
-         ("C-c h" . helm-command-prefix))
+         ("C-h C-l" . helm-locate-library))
+
 
     :config
     (setq helm-split-window-in-side-p t
@@ -213,6 +216,7 @@
           ("C-c p b" . helm-projectile-switch-to-buffer)
           ("C-c p s s" . helm-projectile-ag)
           ("C-c p s g" . helm-projectile-grep))
+
   :diminish projectile-mode
   :init
   (setq-default projectile-enable-caching t
@@ -252,6 +256,7 @@
          ("C-/" . undo-tree-undo)
          ("M-_" . undo-tree-redo)))
 
+
 (use-package org
   :ensure org-plus-contrib
   :pin org
@@ -271,19 +276,16 @@
  'org-babel-load-languages
  '((python . t)))
 
-(use-package yasnippet
-  :ensure t
-  :diminish yas-minor-mode
-  :config
-  (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet-snippets/snippets"
-                           "~/Projects/packages/yasnippet-django/snippets/models"))
+;; (use-package yasnippet
+;;   :ensure t
+;;   :diminish yas-minor-mode
+;;   :config
+;;   (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet-snippets/snippets"
+;;                            "~/Projects/packages/yasnippet-django/snippets/models"))
 
-  (yas-reload-all)
-  (add-hook 'python-mode-hook #'yas-minor-mode)
-  )
-
-(use-package howdoi
-  :ensure t)
+;;   (yas-reload-all)
+;;   (add-hook 'python-mode-hook #'yas-minor-mode)
+;;   )
 
 (use-package exec-path-from-shell
   :ensure t
@@ -292,36 +294,13 @@
     (exec-path-from-shell-initialize))
   )
 
-
-
-;; (use-package neotree
-;;   :ensure t
-;;   :bind (([f8] . neotree-toggle))
-;;   :init
-;;   (setq neo-theme (if window-system 'icons 'arrow)
-;;         neo-window-position 'right
-;;         neo-smart-open t
-;;         neo-window-width 30
-;;         neo-window-fixed-size t
-;;         neo-auto-indent-point t)
-
-;;   (defun neotree-project-toggle ()
-;;     "Open NeoTree using the git root."
-;;     (interactive)
-;;     (let ((project-dir (projectile-project-root))
-;;           (file-name (buffer-file-name)))
-;;       (if project-dir
-;;           (if (neotree-toggle)
-;;               (progn
-;;                 (neotree-dir project-dir)
-;;                 (neotree-find file-name)))
-;;         (message "Could not find git project root."))))
-;;   )
-
 ;; Initialize custom configuration
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'editor)
 (require 'python-dev)
+
+;; black python formatter
+(require 'blacken)
 
 (use-package restclient
   :ensure t
@@ -357,7 +336,8 @@
   :mode ("\\.py\\'" . python-mode)
   :config
   (setq-default fill-column 80
-                indent-tabs-mode nil)
+                indent-tabs-mode nil
+                python-environment-directory "~/.emacs.d/.python-environments/src/")
   ;; Automatically remove trailing whitespace when file is saved.
   (add-hook 'python-mode-hook
             (lambda()
@@ -372,9 +352,14 @@
 (use-package pydoc
   :ensure t)
 
+(use-package sphinx-mode
+  :ensure t
+  :config   (add-hook 'python-mode-hook 'sphinx-doc-mode))
+
 (use-package helm-pydoc
   :ensure t
   :bind (("C-c C-d" . helm-pydoc)))
+
 
 (use-package go-mode
   :ensure t
@@ -387,7 +372,11 @@
 
 (use-package yaml-mode
   :ensure t
-  :mode "\\ya?ml\\'")
+  :mode ("\\.yaml" . yaml-mode))
+
+(use-package haml-mode
+  :ensure t
+  :mode ("\\.haml" . haml-mode))
 
 ;; Themes
 
@@ -402,18 +391,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(custom-safe-themes
    (quote
-    ("9541f1dc11258239ef02aa1a5e9db3e1e46bc8fb1d7dbe83946c1541ae6dbdf9" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("081d0f8a263358308245355f0bb242c7a6726fc85f0397d65b18902ea95da591" "a566448baba25f48e1833d86807b77876a899fc0c3d33394094cf267c970749f" default)))
  '(package-selected-packages
    (quote
-    (spacemas-themes spacemas-theme fireplace ox-rst focus-mode ag spacemacs-theme spaceline google-this focus darktooth-theme beacon zygospore yasnippet yaml-mode xkcd window-numbering wgrep use-package undo-tree restclient resize-window rebecca-theme python-docstring pydoc pretty-symbols pretty-mode org-plus-contrib neotree multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi hl-todo helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag google-translate go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell efire doom-themes docker discover-my-major discover centered-window-mode atom-one-dark-theme ace-isearch))))
+    (writeroom-mode web-mode isortify zygospore yaml-mode window-numbering wgrep virtualenvwrapper use-package undo-tree sphinx-mode sphinx-doc spacemacs-theme restclient resize-window rebecca-theme python-pytest python-docstring python-django python pytest pyimport pygen pyenv-mode pydoc purple-haze-theme org-plus-contrib multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag haml-mode google-translate google-this go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover-my-major discover cider centered-window atom-one-dark-theme ag ace-isearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "Fira Code" :weight normal))))
- '(fringe ((t (:background "#292b2e")))))
+ '(default ((t (:height 100 :family "Fira Code" :weight normal)))))

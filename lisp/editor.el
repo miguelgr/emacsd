@@ -29,6 +29,8 @@
 ;; Move between opened buffers
 (global-set-key [C-tab] 'next-buffer)
 (global-set-key [C-S-iso-lefttab] 'previous-buffer)
+(set-buffer-file-coding-system 'unix t)
+
 
 (defun set-mac-keyboard()
   (interactive)
@@ -139,8 +141,8 @@
 
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp-other-window)
 (global-set-key (kbd "C-M-r") 'isearch-backward-regexp-other-window)
-(global-set-key (kbd "C-M-P") 'move-region-up)
 (global-set-key (kbd "C-M-N") 'move-region-down)
+(global-set-key (kbd "C-M-P") 'move-region-up)
 
 (global-set-key (kbd "C-M-n") 'move-line-down)
 (global-set-key (kbd "C-M-p") 'move-line-up)

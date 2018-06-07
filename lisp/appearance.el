@@ -1,9 +1,11 @@
 ;; Main configuraton for visual appearance
 ;; Themes
-;;(add-to-list 'load-path "~/.emacs.d/themes/")
+;; (add-to-list 'load-path "~/.emacs.d/themes/")
 ;; (load-theme 'rebecca 1)
-;;(load-theme 'spacemacs-dark 1)
-;;(load-theme 'jazz-theme 1)
+;; (load-theme 'spacemacs-dark 1)
+;; (load-theme 'jazz-theme 1)
+;; (load-theme 'doom-nord 1)
+(load-theme 'atom-one-dark 1)
 
 ;; Highlight parenthesis
 (electric-pair-mode 1)
@@ -29,7 +31,7 @@
 (setq echo-keystrokes 0.1)
 ;; Modeline config
 (display-time-mode)
-(display-battery-mode)
+(display-battery-mode 0)
 
 (when (window-system)
   (set-default-font "Fira Code"))
@@ -64,6 +66,6 @@
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
 ;; Font size
 (custom-set-faces
- '(default ((t (:height 140 :family "Fira Code" :weight normal)))))
+ '(default ((t (:height 100 :family "Fira Code" :weight normal)))))
 
 (provide 'appearance)
