@@ -397,9 +397,3 @@
  '(package-selected-packages
    (quote
     (writeroom-mode web-mode isortify zygospore yaml-mode window-numbering wgrep virtualenvwrapper use-package undo-tree sphinx-mode sphinx-doc spacemacs-theme restclient resize-window rebecca-theme python-pytest python-docstring python-django python pytest pyimport pygen pyenv-mode pydoc purple-haze-theme org-plus-contrib multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag haml-mode google-translate google-this go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover-my-major discover cider centered-window atom-one-dark-theme ag ace-isearch))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 100 :family "Fira Code" :weight normal)))))
