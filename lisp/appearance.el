@@ -33,7 +33,8 @@
 (display-time-mode)
 (display-battery-mode 0)
 
- (custom-set-faces
-    '(default ((t (:height 130 :family "Fantasque Sans Mono" :weight normal)))))
+(custom-set-faces
+ ;; '(default ((t (:height 130 :family "Droid Sans Mono" :weight normal)))))
+ '(default ((t (:height 130 :family "Fantasque Sans Mono" :weight normal)))))
 
 (provide 'appearance)

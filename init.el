@@ -190,14 +190,15 @@
 
     (add-to-list 'helm-sources-using-default-as-input #'helm-source-man-pages))
 
-(use-package helm-descbinds :ensure t :defer t)
-(use-package helm-ag :ensure t :defer t)
-(use-package resize-window :ensure t :defer t)
 (use-package ag :ensure t :defer t)
-
-(use-package helm-tramp :ensure t :defer t)
-(use-package helm-themes :if (display-graphic-p) :bind ([f9] . helm-themes))
-
+(use-package helm-descbinds :ensure t :defer t)
+(use-package helm-ag
+ :ensure t
+ :defer t
+ :bind (("C-c a" . helm-do-grep-ag)
+        ("C-c p s p" . helm-do-ag-project-root))
+)
+(use-package resize-window :ensure t :defer t)
 (use-package helm-projectile
   :ensure t
   :bind* (("C-c p D" . projectile-dired)
@@ -206,15 +207,14 @@
 
           ("C-c p p" . helm-projectile-switch-project)
 
-
           ("C-c p f" . helm-projectile-find-file)
-          ("M-p" . helm-projectile-find-file)
+          ("M-P" . helm-projectile-find-file)
 
           ("C-c p g" . helm-projectile-find-file-dwin)
           ("C-c p d" . helm-projectile-find-dir)
           ("C-c p C-r" . helm-projectile-recentf)
           ("C-c p b" . helm-projectile-switch-to-buffer)
-          ("C-c p s s" . helm-projectile-ag)
+          ("C-c p s a" . helm-projectile-ag)
           ("C-c p s g" . helm-projectile-grep))
 
   :diminish projectile-mode
@@ -276,16 +276,15 @@
  'org-babel-load-languages
  '((python . t)))
 
-;; (use-package yasnippet
-;;   :ensure t
-;;   :diminish yas-minor-mode
-;;   :config
-;;   (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet-snippets/snippets"
-;;                            "~/Projects/packages/yasnippet-django/snippets/models"))
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet-snippets/snippets"))
 
-;;   (yas-reload-all)
-;;   (add-hook 'python-mode-hook #'yas-minor-mode)
-;;   )
+  (yas-reload-all)
+  (add-hook 'python-mode-hook #'yas-minor-mode)
+  )
 
 (use-package exec-path-from-shell
   :ensure t
@@ -352,10 +351,6 @@
 (use-package pydoc
   :ensure t)
 
-(use-package sphinx-mode
-  :ensure t
-  :config   (add-hook 'python-mode-hook 'sphinx-doc-mode))
-
 (use-package helm-pydoc
   :ensure t
   :bind (("C-c C-d" . helm-pydoc)))
@@ -391,9 +386,42 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#32302F" "#FB4934" "#B8BB26" "#FABD2F" "#83A598" "#D3869B" "#17CCD5" "#EBDBB2"])
  '(custom-safe-themes
    (quote
-    ("081d0f8a263358308245355f0bb242c7a6726fc85f0397d65b18902ea95da591" "a566448baba25f48e1833d86807b77876a899fc0c3d33394094cf267c970749f" default)))
+    ("b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" "2caab17a07a40c1427693d630adb45f5d6ec968a1771dcd9ea94a6de5d9f0838" "c90fd1c669f260120d32ddd20168343f5c717ca69e95d2f805e42e88430c340e" "78496062ff095da640c6bb59711973c7c66f392e3ac0127e611221d541850de2" "72a097f48e588eaa08b17027ac20304dd3b3ea8ceaca4ca553fb2577b64f4d09" "d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" "081d0f8a263358308245355f0bb242c7a6726fc85f0397d65b18902ea95da591" "a566448baba25f48e1833d86807b77876a899fc0c3d33394094cf267c970749f" default)))
+ '(fci-rule-color "#202325")
  '(package-selected-packages
    (quote
-    (writeroom-mode web-mode isortify zygospore yaml-mode window-numbering wgrep virtualenvwrapper use-package undo-tree sphinx-mode sphinx-doc spacemacs-theme restclient resize-window rebecca-theme python-pytest python-docstring python-django python pytest pyimport pygen pyenv-mode pydoc purple-haze-theme org-plus-contrib multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag haml-mode google-translate google-this go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover-my-major discover cider centered-window atom-one-dark-theme ag ace-isearch))))
+    (yasnippet-snippets yasnippet darktooth-theme faff-theme flatland-theme coffee-mode writeroom-mode web-mode isortify zygospore yaml-mode window-numbering wgrep virtualenvwrapper use-package undo-tree spacemacs-theme restclient resize-window rebecca-theme python-pytest python-docstring python-django python pytest pyimport pygen pyenv-mode pydoc purple-haze-theme org-plus-contrib multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag haml-mode google-translate google-this go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover-my-major discover cider centered-window atom-one-dark-theme ag ace-isearch)))
+ '(pos-tip-background-color "#36473A")
+ '(pos-tip-foreground-color "#FFFFC8")
+ '(vc-annotate-background "#1f2124")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#ff0000")
+     (40 . "#ff4a52")
+     (60 . "#f6aa11")
+     (80 . "#f1e94b")
+     (100 . "#f5f080")
+     (120 . "#f6f080")
+     (140 . "#41a83e")
+     (160 . "#40b83e")
+     (180 . "#b6d877")
+     (200 . "#b7d877")
+     (220 . "#b8d977")
+     (240 . "#b9d977")
+     (260 . "#93e0e3")
+     (280 . "#72aaca")
+     (300 . "#8996a8")
+     (320 . "#afc4db")
+     (340 . "#cfe2f2")
+     (360 . "#dc8cc3"))))
+ '(vc-annotate-very-old-color "#dc8cc3"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:height 130 :family "Fantasque Sans Mono" :weight normal)))))
