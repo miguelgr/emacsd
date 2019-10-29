@@ -2,11 +2,6 @@
 (when (version< emacs-version "25.1")
   (error "Configuration needs at least GNU Emacs 24.1. You are using %s" emacs-version))
 
-;; Emacs server mode always on
-;; emacsclient -t/-c
-(server-mode)
-(server-start)
-
 ;; Require packages
 (require 'package)
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -15,30 +10,24 @@
                          ("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
-
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
-(defmacro add-modes-hook (hook &rest modes)
-  `(dolist (mode (quote ,modes))
-     (let ((mode-name (symbol-name mode)))
-       (add-hook (intern (format "%s-mode-hook" mode-name)) (quote ,hook)))))
-
-(use-package resize-window
-  :ensure t)
-
 
 (use-package expand-region
   :ensure t
   :bind (("C-@" . er/expand-region)))
 
+(use-package dired
+  :config
+  (setq dired-dwim-target t)
+  :hook (dired-mode . dired-hide-details-mode))
 
-(use-package writeroom-mode
+(use-package dired-sidebar
   :ensure t
-  :bind (("C-c w m" . writeroom-mode)))
+  :bind (("C-c d" . dired-sidebar-toggle-sidebar)))
 
-
+;; Google services
 (use-package google-translate
   :ensure t
   :bind (("C-c / t" . google-translate-query-translate)
@@ -48,23 +37,12 @@
   :ensure t
   :bind (("C-c / g" . google-this)))
 
-
-(use-package howdoi
+(use-package resize-window
   :ensure t)
-
-(use-package discover
-  :ensure t
-  :config (global-discover-mode 1))
-
-(use-package discover-my-major
-  :ensure t
-  :bind (("C-c h" . discover-my-mayor)))
 
 (use-package avy
   :ensure t
   :bind (("M-g l" . avy-goto-line)
-         ("M-g w" . avy-goto-word-1)
-         ("M-g e" . avy-goto-word-0)
          ("C-:" . avy-goto-char)
          ("C-'" . avy-goto-char-2)))
 
@@ -88,6 +66,10 @@
 (use-package flycheck-pyflakes
   :ensure t
   :config
+  (custom-set-variables
+   '(flycheck-python-flake8-executable "python3")
+   '(flycheck-python-pycompile-executable "python3")
+   '(flycheck-python-pylint-executable "python3"))
   (add-hook 'python-mode-hook 'hungry-delete-mode))
 
 (use-package jedi
@@ -95,23 +77,12 @@
   :config
   (add-hook 'python-mode-hook 'jedi:setup)
   (add-hook 'python-mode-hook 'jedi:ac-setup)
-  (setq jedi:get-in-function-call-delay 400)
+  (setq jedi:environment-root "jedi")
+  (setq jedi:get-in-function-call-delay 200)
+
   :bind (("C-." . jedi:complete)
          ("C-c ." . jedi:goto-definition)
          ("C-c :" . jedi:goto-definition-next)))
-;;
-(use-package pytest
-  :ensure t)
-
-
-(defvar basic-docsets '("Python_3" "Python_2" "Ansible" "Emacs_Lisp"))
-
-(use-package helm-dash
-  :ensure t
-  :config
-  (setq helm-dash-common-docsets basic-docsets
-        helm-dash-browser-func 'eww)
-  :bind (("s-/" . helm-dash-at-point)))
 
 (use-package window-numbering
   :ensure t
@@ -125,14 +96,12 @@
 (use-package magit
   :ensure t
   :pin melpa-stable
+  :config
+  (setq magit-section-initial-visibility-alist '((unpushed . show)))
   :bind (("C-c m s" . magit-status)
 	 ("C-c m b" . magit-blame)
-	 ("C-c m d" . magit-diff-buffer-file)))
-
-(use-package github-browse-file
-  :ensure t
-  :bind ("C-x g b" . github-browse-file)
-  :init (setq github-browse-file-show-line-at-point t))
+	 ("C-c m d" . magit-diff-buffer-file)
+	 ("C-c m f" . magit-find-file-other-window)))
 
 (use-package hungry-delete
   :ensure t
@@ -195,16 +164,15 @@
 (use-package helm-ag
  :ensure t
  :defer t
+;; :config (setq helm-follow-mode-persistent t)
  :bind (("C-c a" . helm-do-grep-ag)
         ("C-c p s p" . helm-do-ag-project-root))
 )
-(use-package resize-window :ensure t :defer t)
+
 (use-package helm-projectile
   :ensure t
   :bind* (("C-c p D" . projectile-dired)
-          ("C-c p v" . projectile-vc)
           ("C-c p k" . projectile-kill-buffers)
-
           ("C-c p p" . helm-projectile-switch-project)
 
           ("C-c p f" . helm-projectile-find-file)
@@ -213,8 +181,10 @@
           ("C-c p g" . helm-projectile-find-file-dwin)
           ("C-c p d" . helm-projectile-find-dir)
           ("C-c p C-r" . helm-projectile-recentf)
+          ("C-c p i" . projectile-invalidate-cache)
           ("C-c p b" . helm-projectile-switch-to-buffer)
           ("C-c p s a" . helm-projectile-ag)
+          ("C-c s" . helm-projectile-ag)
           ("C-c p s g" . helm-projectile-grep))
 
   :diminish projectile-mode
@@ -227,11 +197,6 @@
   :config
   (projectile-global-mode)
   (helm-projectile-on))
-
-(use-package wgrep
-  :ensure t
-  :bind (("C-c s" . wgrep-save-all-buffers))
-  )
 
 (use-package multiple-cursors
   :ensure t
@@ -280,32 +245,36 @@
   :ensure t
   :diminish yas-minor-mode
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/packages/yasnippet-snippets/snippets"))
+  (setq yas-snippet-dirs '("~/.emacs.d/yasnippet/snippets/snippets"))
 
   (yas-reload-all)
   (add-hook 'python-mode-hook #'yas-minor-mode)
   )
 
-(use-package exec-path-from-shell
+
+(use-package buffer-move
   :ensure t
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
-  )
+  :bind (("C-c w <up>"    . buf-move-up)
+         ("C-c w <down>"  . buf-move-down)
+         ("C-c w <left>"  . buf-move-left)
+         ("C-c w <right>" . buf-move-right)))
+
+
+(use-package zeal-at-point
+  :ensure t
+  :bind ("C-c d" . zeal-at-point))
 
 ;; Initialize custom configuration
+;;
 (add-to-list 'load-path "~/.emacs.d/lisp")
 (require 'editor)
 (require 'python-dev)
 
-;; black python formatter
-(require 'blacken)
-
+;; Major Modes
 (use-package restclient
   :ensure t
   :mode ("\\.http\\'" . restclient-mode))
 
-;; Major Modes
 
 (use-package clojure-mode
   :ensure t
@@ -334,6 +303,7 @@
 (use-package python
   :mode ("\\.py\\'" . python-mode)
   :config
+  (setq py-shell-name "python3")
   (setq-default fill-column 80
                 indent-tabs-mode nil
                 python-environment-directory "~/.emacs.d/.python-environments/src/")
@@ -346,23 +316,23 @@
                              (delete-trailing-whitespace))))))
 
   :bind (("C-c C-b" . python-add-breakpoint))
-  :interpreter "python")
-
-(use-package pydoc
-  :ensure t)
-
-(use-package helm-pydoc
-  :ensure t
-  :bind (("C-c C-d" . helm-pydoc)))
-
+  :interpreter "ipython")
 
 (use-package go-mode
   :ensure t
   :mode ("\\.go\\'" . go-mode)
   :interpreter "go")
 
+(use-package go-playground
+  :ensure t)
+
+(use-package rust-mode
+  :ensure t
+  :config (setq rust-format-on-save t))
+
 (use-package markdown-mode
   :ensure t
+  :hook (markdown-mode . visual-line-mode)
   :mode ("\\.md" . markdown-mode))
 
 (use-package yaml-mode
@@ -374,54 +344,17 @@
   :mode ("\\.haml" . haml-mode))
 
 ;; Themes
-
-;;(use-package spacemas-theme :ensure t :defer t)
-(use-package rebecca-theme :ensure t :defer t)
-(use-package doom-themes :ensure t)
-(use-package jazz-theme :ensure t :defer t)
-(use-package atom-one-dark-theme :ensure t :defer t)
 (require 'appearance)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#32302F" "#FB4934" "#B8BB26" "#FABD2F" "#83A598" "#D3869B" "#17CCD5" "#EBDBB2"])
- '(custom-safe-themes
-   (quote
-    ("b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" "2caab17a07a40c1427693d630adb45f5d6ec968a1771dcd9ea94a6de5d9f0838" "c90fd1c669f260120d32ddd20168343f5c717ca69e95d2f805e42e88430c340e" "78496062ff095da640c6bb59711973c7c66f392e3ac0127e611221d541850de2" "72a097f48e588eaa08b17027ac20304dd3b3ea8ceaca4ca553fb2577b64f4d09" "d3a7eea7ebc9a82b42c47e49517f7a1454116487f6907cf2f5c2df4b09b50fc1" "081d0f8a263358308245355f0bb242c7a6726fc85f0397d65b18902ea95da591" "a566448baba25f48e1833d86807b77876a899fc0c3d33394094cf267c970749f" default)))
- '(fci-rule-color "#202325")
- '(package-selected-packages
-   (quote
-    (yasnippet-snippets yasnippet darktooth-theme faff-theme flatland-theme coffee-mode writeroom-mode web-mode isortify zygospore yaml-mode window-numbering wgrep virtualenvwrapper use-package undo-tree spacemacs-theme restclient resize-window rebecca-theme python-pytest python-docstring python-django python pytest pyimport pygen pyenv-mode pydoc purple-haze-theme org-plus-contrib multiple-cursors markdown-mode magit jedi jazz-theme hungry-delete howdoi helm-tramp helm-pydoc helm-projectile helm-descbinds helm-dash helm-ag haml-mode google-translate google-this go-mode github-browse-file flycheck-pyflakes expand-region exec-path-from-shell doom-themes discover-my-major discover cider centered-window atom-one-dark-theme ag ace-isearch)))
- '(pos-tip-background-color "#36473A")
- '(pos-tip-foreground-color "#FFFFC8")
- '(vc-annotate-background "#1f2124")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#ff0000")
-     (40 . "#ff4a52")
-     (60 . "#f6aa11")
-     (80 . "#f1e94b")
-     (100 . "#f5f080")
-     (120 . "#f6f080")
-     (140 . "#41a83e")
-     (160 . "#40b83e")
-     (180 . "#b6d877")
-     (200 . "#b7d877")
-     (220 . "#b8d977")
-     (240 . "#b9d977")
-     (260 . "#93e0e3")
-     (280 . "#72aaca")
-     (300 . "#8996a8")
-     (320 . "#afc4db")
-     (340 . "#cfe2f2")
-     (360 . "#dc8cc3"))))
- '(vc-annotate-very-old-color "#dc8cc3"))
+
+;; Emacs server mode always on
+;; emacsclient -t/-c
+(server-mode)
+(server-start)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 130 :family "Fantasque Sans Mono" :weight normal)))))
+ '(default ((t (:height 120 :family "Fantasque Sans Mono" :weight normal)))))
+
